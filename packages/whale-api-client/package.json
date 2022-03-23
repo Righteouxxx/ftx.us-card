@@ -1,0 +1,32 @@
+{
+  "private": false,
+  "name": "@defichain/whale-api-client",
+  "version": "0.0.0",
+  "description": "Official JS client for DeFi Whale, the super index for DeFi Blockchain to simplify DeFi light implementation.",
+  "keywords": [
+    "DeFiChain",
+    "DeFi",
+    "DeFi Whale",
+    "Whale",
+    "Blockchain",
+    "API",
+    "Bitcoin"
+  ],
+  "repository": "DeFiCh/whale",
+  "bugs": "https://github.com/DeFiCh/whale/issues",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "./prebuild && tsc"
+  },
+  "dependencies": {
+    "@defichain/jellyfish-api-core": "^2.10.1",
+    "abort-controller": "^3.0.0",
+    "cross-fetch": "^3.1.2",
+    "url-search-params-polyfill": "8.1.1"
+  }
+}
