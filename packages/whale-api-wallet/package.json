@@ -1,0 +1,31 @@
+{
+  "private": false,
+  "name": "@defichain/whale-api-wallet",
+  "version": "0.0.0",
+  "description": "Using whale-api-client with jellyfish-wallet with DeFi light wallet implementation.",
+  "keywords": [
+    "DeFiChain",
+    "DeFi",
+    "DeFi Whale",
+    "Whale",
+    "Blockchain",
+    "API",
+    "Bitcoin"
+  ],
+  "repository": "DeFiCh/whale",
+  "bugs": "https://github.com/DeFiCh/whale/issues",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@defichain/jellyfish-transaction-builder": "^2.9.0",
+    "@defichain/jellyfish-wallet": "^2.9.0",
+    "@defichain/whale-api-client": "0.0.0"
+  }
+}
