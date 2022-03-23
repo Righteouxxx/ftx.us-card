@@ -1,0 +1,30 @@
+# Define individuals that are responsible for code in a repository.
+# More details are here: https://help.github.com/articles/about-codeowners/
+
+/.github/                                       @fuxingloh
+/.husky/                                        @fuxingloh
+/.idea/                                         @fuxingloh
+
+/packages/                                      @fuxingloh
+/packages/whale-api-client/                     @fuxingloh @canonbrother @jingyi2811 @ivan-zynesis @thedoublejay @monstrobishi
+/packages/whale-api-wallet/                     @fuxingloh @ivan-zynesis @thedoublejay @monstrobishi
+
+/src/                                           @fuxingloh
+/src/module.api/                                @fuxingloh @canonbrother @jingyi2811
+/src/module.database/                           @fuxingloh
+/src/module.database/provider.level             @fuxingloh
+/src/module.database/provider.memory            @fuxingloh
+/src/module.defid/                              @fuxingloh
+/src/module.health/                             @fuxingloh
+/src/module.indexer/                            @fuxingloh
+/src/module.model/                              @fuxingloh
+
+lerna.json                                      @fuxingloh @canonbrother
+tsconfig.json                                   @fuxingloh @canonbrother
+jest.config.js                                  @fuxingloh @canonbrother
+package.json                                    @fuxingloh
+package-lock.json                               @fuxingloh
+
+CONTRIBUTING.md                                 @fuxingloh @canonbrother @jingyi2811
+README.md                                       @fuxingloh
+LICENSE                                         @fuxingloh
