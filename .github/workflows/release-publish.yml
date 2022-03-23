@@ -1,0 +1,100 @@
+name: Publish
+
+on:
+  release:
+    types: [ published, prereleased ]
+
+jobs:
+  docker:
+    name: Docker
+    runs-on: ubuntu-latest
+    environment: Docker Release
+    steps:
+      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      - uses: actions/setup-node@270253e841af726300e85d718a5f606959b2903c
+        with:
+          node-version: '15'
+
+      - uses: actions/github-script@441359b1a30438de65712c2fbca0abe4816fa667
+        id: version
+        with:
+          script: |
+            const semver = context.ref.replace('refs/tags/v', '')
+            if (semver.match(/^[0-9]+\.[0-9]+\.[0-9]+$/)) {
+              return semver
+            }
+
+            throw new Error('not semver')
+          result-encoding: string
+
+      - run: npm ci
+      - run: npm run version:set ${{ steps.version.outputs.result }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@27d0a4f181a40b142cce983c5393082c365d1480
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@94ab11c41e45d028884a99163086648e898eed25
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@a66e35b9cbcf4ad0ea91ffcaf7bbad63ad9e0229
+        with:
+          context: .
+          push: true
+          platforms: |
+            linux/amd64
+            linux/arm64
+          tags: |
+            ghcr.io/defich/whale:latest
+            ghcr.io/defich/whale:${{ steps.version.outputs.result }}
+
+
+  npm:
+    name: NPM
+    runs-on: ubuntu-latest
+    environment: NPM Release
+    steps:
+      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      - uses: actions/setup-node@270253e841af726300e85d718a5f606959b2903c
+        with:
+          node-version: '15'
+
+      - uses: actions/github-script@441359b1a30438de65712c2fbca0abe4816fa667
+        id: version
+        with:
+          script: |
+            const semver = context.ref.replace('refs/tags/v', '')
+            if (semver.match(/^[0-9]+\.[0-9]+\.[0-9]+$/)) {
+              return semver
+            }
+
+            throw new Error('not semver')
+          result-encoding: string
+
+      - run: npm ci
+      - run: npm run version:set ${{ steps.version.outputs.result }}
+      - run: npm run packages:build
+
+      - name: Publish Next
+        if: github.event.release.prerelease
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
+          npm run packages:publish:next
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: Publish Latest
+        if: "!github.event.release.prerelease"
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
+          npm run packages:publish:latest
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
